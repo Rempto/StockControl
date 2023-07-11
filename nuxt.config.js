@@ -1,4 +1,5 @@
 import colors from 'vuetify/es5/util/colors'
+require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` })
 
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
@@ -35,6 +36,10 @@ export default {
     '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
+    [
+      '@nuxtjs/dotenv',
+      { filename: `.env.${process.env.NODE_ENV}`, systemvars: true },
+    ],
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules

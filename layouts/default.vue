@@ -1,4 +1,10 @@
 <template>
+
+import CardIcon from '~/components/CardIcon.vue';
+
+import CardIcon from '~/components/CardIcon.vue';
+
+import CardIcon from '~/components/CardIcon.vue';
   <v-app dark>
     <v-navigation-drawer
       v-model="drawer"
@@ -26,20 +32,10 @@
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-btn icon @click.stop="miniVariant = !miniVariant">
-        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-      </v-btn>
-      <v-btn icon @click.stop="clipped = !clipped">
-        <v-icon>mdi-application</v-icon>
-      </v-btn>
-      <v-btn icon @click.stop="fixed = !fixed">
-        <v-icon>mdi-minus</v-icon>
-      </v-btn>
       <v-toolbar-title>{{ title }}</v-toolbar-title>
+      
       <v-spacer />
-      <v-btn icon @click.stop="rightDrawer = !rightDrawer">
-        <v-icon>mdi-menu</v-icon>
-      </v-btn>
+      <v-btn @click="logOut">Sair</v-btn>
     </v-app-bar>
     <v-main>
       <v-container>
@@ -64,29 +60,56 @@
 
 <script>
 export default {
-  name: 'DefaultLayout',
-  data() {
-    return {
-      clipped: false,
-      drawer: false,
-      fixed: false,
-      items: [
-        {
-          icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/',
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire',
-        },
-      ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'Vuetify.js',
-    }
-  },
+    name: "DefaultLayout",
+    data() {
+        return {
+            clipped: false,
+            drawer: false,
+            fixed: false,
+            items: [
+                // {
+                //   icon: 'mdi-chart-bubble',
+                //   title: 'Login',
+                //   to: '/',
+                //   teste: false
+                // },
+                // {
+                //   icon: 'mdi-chart-bubble',
+                //   title: 'Registro',
+                //   to: '/register',
+                // },
+                {
+                    icon: "mdi-chart-bubble",
+                    title: "Registro de produtos",
+                    to: "/produtoregistro",
+                },
+                {
+                    icon: "mdi-chart-bubble",
+                    title: "Lista de produtos",
+                    to: "/listaproduto",
+                },
+                {
+                    icon: "mdi-chart-bubble",
+                    title: "Movimentação",
+                    to: "/movimentacao",
+                },
+                {
+                    icon: "mdi-chart-bubble",
+                    title: "Lista de movimentação",
+                    to: "/listamovimentacao",
+                }
+            ],
+            miniVariant: false,
+            right: true,
+            rightDrawer: false,
+            title: "Estoque",
+        };
+    },
+    methods: {
+        logOut() {
+            this.$store.dispatch("user/logOut");
+        }
+    },
+    components: { CardIcon, CardIcon, CardIcon }
 }
 </script>

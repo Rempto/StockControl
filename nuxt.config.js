@@ -29,10 +29,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [
-    '@/plugins/axios',
-    '~/plugins/persistedstate.js'
-  ],
+  plugins: ['@/plugins/axios', '~/plugins/persistedstate.js', '~/plugins/helper.js'],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -56,8 +53,8 @@ export default {
     '@nuxtjs/axios',
     'vue-toastification/nuxt',
   ],
-  toast:{
-    position: "top-right",
+  toast: {
+    position: 'top-right',
     timeout: 5000,
     closeOnClick: true,
     pauseOnFocusLoss: true,
@@ -66,14 +63,14 @@ export default {
     draggablePercent: 0.6,
     showCloseButtonOnHover: false,
     hideProgressBar: true,
-    closeButton: "button",
+    closeButton: 'button',
     icon: true,
-    rtl: false
+    rtl: false,
   },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: `/`, //${process.env.API_KEY}
+    baseURL: `/`, // ${process.env.API_KEY}
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
@@ -97,6 +94,6 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-   // transpile: ['vue-toastification'],
+    // transpile: ['vue-toastification'],
   },
 }

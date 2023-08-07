@@ -1,41 +1,80 @@
 <template>
   <div>
     <header>
-      <div class="primary-card pa-8 v-card v-sheet theme--light">
-        <div class="row row--dense"><div class="col col-10">
-          <div class="d-flex"><!----> <h2 id="title" class="title-h2 mb-3 ml-1">Movimentação</h2>
-            </div> <p class="paragraph-2">Visualize detalhes sobre as movimentações</p>
-          </div> 
-          </div>
-        </div>
-      </header>
-  <div class="d-flex mt-5">
-    <v-row
-      class="flex"
-      justify="center"
-    >
-    <CardMovimentacao @movimentacao="CreateMovement"></CardMovimentacao>
-    </v-row>
-</div>
-</div>
+      <v-card class=" pa-8 theme--light" style="border-radius: 20px; margin-top: 5px;">
+        <v-row>
+          <v-col>
+            <v-flex>
+              <!---->
+              <h2 id="title" class=" mb-3 ml-1">Cadastro de Movimentação</h2>
+            </v-flex>
+            <p class="paragraph-2">Faça suas movimentações</p>
+          </v-col>
+        </v-row>
+      </v-card>
+    </header>
+    <div class="pa-2 primary-card">
+      <v-btn class="d-flex white--text" color="blue" @click="backButton">
+        <v-icon dark left>
+          mdi-arrow-left
+        </v-icon>Back
+      </v-btn>
+    </div>
+    <div class="pa-3">
+      <v-row>
+        <v-flex xs12 lg6 sm4 md6>
+          <CardMovimentacao @movimentacao="getProduct"></CardMovimentacao>
+        </v-flex>
+      </v-row>
+    </div>
+  </div>
 </template>
-
 
 <script>
 export default {
   methods: {
     async CreateMovement(obj) {
-      console.log(obj)
-      await this.$axios.$post(`movement/post`, obj).then((response) => {
-        this.$toast.success(response)
-        }).catch(() => {
-       
-      });
+      await this.$axios
+        .$post(`movement/post`, obj)
+        .then((response) => {
+          this.$toast.success(response)
+        })
+        .catch(() => { })
     },
+    backButton() {
+      this.$router.push('/listamovimentacao')
+    },
+    async getProduct(obj) {
 
-    
+      await this.$axios.$get(`product/getbyid?id=${obj.ProductId}`).then((response) => {
+        const prod = {
+          id: response.id,
+          name: response.name,
+          price: response.price,
+          priceSale: response.priceSale,
+          stockAmount: 0,
+        }
+        if (obj.Move === 0) {
 
-  
-}
+          prod.stockAmount = response.stockAmount - obj.Qtd
+        } else {
+          prod.stockAmount = response.stockAmount + parseInt(obj.Qtd)
+        }
+        if (prod.stockAmount >= 0) {
+          this.updateProduct(prod)
+          this.CreateMovement(obj)
+          this.backButton()
+        }
+        else {
+          this.$toast.error("Quantidade acima do estoque!")
+        }
+      }).catch(() => { })
+    }
+    ,
+    async updateProduct(prod) {
+      await this.$axios.$put(`product/edit`, prod).then(() => {
+      })
+    }
+  },
 }
 </script>

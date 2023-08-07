@@ -1,6 +1,5 @@
-export const state = ()=>({
-    user:{},
-    token:"",
-    dateExpires:""
+export const state = () => ({
+  user: {},
+  token: '',
+  dateExpires: '',
 })
-

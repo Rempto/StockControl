@@ -1,5 +1,5 @@
-export default{
-    getPersistedInfo(state){
-        return state;
-    }
+export default {
+  getPersistedInfo(state) {
+    return state
+  },
 }

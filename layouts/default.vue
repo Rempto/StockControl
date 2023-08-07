@@ -1,26 +1,9 @@
 <template>
-
-import CardIcon from '~/components/CardIcon.vue';
-
-import CardIcon from '~/components/CardIcon.vue';
-
-import CardIcon from '~/components/CardIcon.vue';
   <v-app dark>
-    <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      fixed
-      app
-    >
+    <v-navigation-drawer style="background-color: #f5f5f5;" v-model="drawer" :mini-variant="miniVariant"
+      :clipped="clipped" fixed app>
       <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
-        >
+        <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router exact>
           <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
@@ -30,14 +13,16 @@ import CardIcon from '~/components/CardIcon.vue';
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar :clipped-left="clipped" fixed app>
+    <v-app-bar :clipped-left="clipped" fixed app color="blue">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title>{{ title }}</v-toolbar-title>
-      
+      <v-toolbar-title class="white--text">{{ title }}</v-toolbar-title>
       <v-spacer />
-      <v-btn @click="logOut">Sair</v-btn>
+      <div>
+        <cardAvatar></cardAvatar>
+      </div>
+
     </v-app-bar>
-    <v-main>
+    <v-main style="background-color: #f5f5f5;">
       <v-container>
         <Nuxt />
       </v-container>
@@ -60,56 +45,36 @@ import CardIcon from '~/components/CardIcon.vue';
 
 <script>
 export default {
-    name: "DefaultLayout",
-    data() {
-        return {
-            clipped: false,
-            drawer: false,
-            fixed: false,
-            items: [
-                // {
-                //   icon: 'mdi-chart-bubble',
-                //   title: 'Login',
-                //   to: '/',
-                //   teste: false
-                // },
-                // {
-                //   icon: 'mdi-chart-bubble',
-                //   title: 'Registro',
-                //   to: '/register',
-                // },
-                {
-                    icon: "mdi-chart-bubble",
-                    title: "Registro de produtos",
-                    to: "/produtoregistro",
-                },
-                {
-                    icon: "mdi-chart-bubble",
-                    title: "Lista de produtos",
-                    to: "/listaproduto",
-                },
-                {
-                    icon: "mdi-chart-bubble",
-                    title: "Movimentação",
-                    to: "/movimentacao",
-                },
-                {
-                    icon: "mdi-chart-bubble",
-                    title: "Lista de movimentação",
-                    to: "/listamovimentacao",
-                }
-            ],
-            miniVariant: false,
-            right: true,
-            rightDrawer: false,
-            title: "Estoque",
-        };
-    },
-    methods: {
-        logOut() {
-            this.$store.dispatch("user/logOut");
-        }
-    },
-    components: { CardIcon, CardIcon, CardIcon }
+  name: "DefaultLayout",
+  data() {
+    return {
+      clipped: false,
+      drawer: false,
+      fixed: false,
+      items: [
+        {
+          icon: "mdi-widgets",
+          title: "Estoque",
+          to: "/listaproduto",
+        },
+        {
+          icon: " mdi-arrow-up-bold-box-outline",
+          title: "Lista de movimentação",
+          to: "/listamovimentacao",
+        },
+        {
+          icon: " mdi-finance",
+          title: "Graficos",
+          to: "/graphs",
+        },
+      ],
+      miniVariant: false,
+      right: true,
+      rightDrawer: false,
+      title: "Estoque",
+    };
+  },
+
+
 }
 </script>

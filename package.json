@@ -15,11 +15,13 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/dotenv": "^1.4.1",
+    "chart.js": "^3.0.0",
     "core-js": "^3.25.3",
     "dotenv": "^16.3.1",
     "js-cookie": "^3.0.5",
     "nuxt": "^2.15.8",
     "vue": "^2.7.10",
+    "vue-chartjs": "4.1.2",
     "vue-server-renderer": "^2.7.10",
     "vue-template-compiler": "^2.7.10",
     "vue-toastification": "^1.7.14",

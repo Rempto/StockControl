@@ -19,7 +19,7 @@
               {{ user.email }}
             </p>
             <v-divider class="my-3"></v-divider>
-            <v-btn depressed rounded text>
+            <v-btn depressed rounded text @click="profileButton">
               Meu perfil
             </v-btn>
             <v-divider class="my-3"></v-divider>
@@ -55,6 +55,9 @@ export default {
     logOut() {
       this.$store.dispatch("user/logOut");
     },
+    profileButton() {
+      this.$router.push('/profile')
+    }
 
   },
 

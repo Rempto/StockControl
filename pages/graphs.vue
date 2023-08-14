@@ -19,17 +19,18 @@
 
             </v-container>
             <v-row class="ma-0">
-                <v-col :cols="$vuetify.breakpoint.smAndDown ? '12' : '12'" class="pa-0">
-
-                    <BarChart></BarChart>
-
-                </v-col>
-                <v-col :cols="$vuetify.breakpoint.smAndDown ? '12' : '12'" class="pa-0">
+                <v-col :cols="$vuetify.breakpoint.smAndDown ? '12' : '12'" class="pa-5">
                     <v-card class=" pa-8 theme--light" style="border-radius: 20px; margin-top: 5px;">
                         <div class="caption grey--text">Lucros por mes</div>
                         <LineChart></LineChart>
                     </v-card>
                 </v-col>
+                <v-col :cols="$vuetify.breakpoint.smAndDown ? '12' : '12'" class="pa-5">
+
+                    <BarChart></BarChart>
+
+                </v-col>
+
             </v-row>
         </div>
 

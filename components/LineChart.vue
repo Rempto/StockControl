@@ -1,7 +1,5 @@
 <template>
     <div>
-        <LineChartGenerator :chart-options="chartOptions" :chart-data="chartData" :chart-id="chartId"
-            :dataset-id-key="datasetIdKey" :css-classes="cssClasses" :styles="styles" :width="width" :height="height" />
         <v-row class="ma-0">
             <v-col :cols="$vuetify.breakpoint.smAndDown ? '6' : '3'" class="pt-12">
                 <v-select label="Produto" v-model="productId" :items="items" @change="getGraphs" clearable
@@ -28,6 +26,9 @@
             </v-col>
 
         </v-row>
+        <LineChartGenerator :chart-options="chartOptions" :chart-data="chartData" :chart-id="chartId"
+            :dataset-id-key="datasetIdKey" :css-classes="cssClasses" :styles="styles" :width="width" :height="height" />
+
     </div>
 </template>
 <script>
@@ -130,14 +131,14 @@ export default {
             }
             await this.$axios.$get(`movement/get-graphs-earnings?${this.$convertToQueryString(model)}`)
                 .then((response) => {
-                    console.log(response)
+
                     this.chartData.datasets[0].data = response.earnings
                     this.sale = response.sales.toFixed(2)
                     this.entry = response.entry.toFixed(2)
                     this.earnings = (this.sale - this.entry).toFixed(2)
 
-                }).catch((e) => {
-                    console.log(e)
+                }).catch(() => {
+
                 })
         },
 

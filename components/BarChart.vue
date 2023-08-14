@@ -98,10 +98,10 @@ export default {
     methods: {
         async getGraphs() {
             await this.$axios.$get(`movement/get-graphs-by-date?filteredMonth=${this.$moment().format("yyyy-MM-DD")}&moveType=${this.move}`).then((response) => {
-                console.log(response)
+
                 this.chartData.datasets[0].data = response
-            }).catch((e) => {
-                console.log(e)
+            }).catch(() => {
+
             })
         },
         getmonths() {

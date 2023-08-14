@@ -8,14 +8,25 @@
 
       <v-text-field v-model="obj.Password" type="password" label="Senha" required outlined></v-text-field>
 
-      <div v-if="isLogin">
-        <NuxtLink to="/register">Registrar</NuxtLink>
-      </div>
 
-      <v-btn :loading="loading" :disabled="!valid" color="success" class="mr-4" @click="AlertOn">
-        {{ isLogin ? 'Logar' : 'Registrar' }}
-      </v-btn>
+      <v-row class="ma-0 justify-space-between">
+        <v-col :cols="$vuetify.breakpoint.smAndDown ? '8' : '8'" class="pa-0">
+          <v-btn :loading="loading" :disabled="!valid" color="success" @click="AlertOn">
+            {{ isLogin ? 'Logar' : 'Registrar' }}
+          </v-btn>
+        </v-col>
+        <v-col v-if="isLogin" :cols="$vuetify.breakpoint.smAndDown ? '4' : '4'" class="pa-0">
+          <NuxtLink to="/register">Registrar</NuxtLink>
+        </v-col>
+
+      </v-row>
+
+      <div v-if="isLogin" class="ma-0 pt-2">
+        <NuxtLink to="/forgetpassword">Esqueci minha senha</NuxtLink>
+      </div>
     </v-form>
+
+
   </v-card>
 </template>
 

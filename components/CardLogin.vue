@@ -1,6 +1,7 @@
 <template>
   <v-card class="primary-card pa-8 v-card v-sheet theme--light pa-10" style="border-radius: 20px; margin-top: 5px;">
     <h2>{{ title }}</h2>
+    
     <v-form ref="form" v-model="valid" lazy-validation>
       <v-text-field v-if="!isLogin" v-model="obj.Name" label="Nome" required outlined></v-text-field>
 

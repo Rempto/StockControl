@@ -3,8 +3,8 @@
         <v-col :cols="$vuetify.breakpoint.smAndDown ? '12' : '4'" class="pa-0">
             <v-card class="primary-card pa-8 v-card v-sheet theme--light pa-10"
                 style="border-radius: 20px; margin-top: 5px;">
-                <h2>esqueci minha senha</h2>
-                <v-form ref="form" lazy-validation>
+                <h3>Insira o e-mail para enviarmos um código para recuperar a senha</h3>
+                <v-form ref="form" class="pt-4" lazy-validation>
 
                     <v-text-field v-model="email" :rules="emailRules" label="Email" required outlined></v-text-field>
 
@@ -42,7 +42,7 @@ export default {
             await this.$axios
                 .$get(`user/send-email?email=${this.email}`)
                 .then((response) => {
-                    //  this.$toast.success(response)
+                    this.$toast.success(response)
                 })
                 .catch((error) => {
                     this.$toast.error(error.response.data)

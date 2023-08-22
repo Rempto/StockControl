@@ -1,15 +1,44 @@
 <template>
-  <v-card max-width="600" class=" primary-card pa-10  theme--light" style="border-radius: 20px; margin-top: 5px;">
+  <v-card
+    max-width="600"
+    class="primary-card pa-8 theme--light"
+    style="border-radius: 20px; margin-top: 5px"
+  >
+    <h2>novo produto</h2>
     <v-form ref="form" v-model="valid" lazy-validation>
-      <v-text-field v-model="obj.Name" :rules="[(v) => (!!v && v.length > 0) || 'Campo obrigatório']" label="Nome"
-        required outlined></v-text-field>
+      <v-text-field
+        v-model="obj.Name"
+        :rules="[(v) => (!!v && v.length > 0) || 'Campo obrigatório']"
+        label="Nome"
+        required
+        outlined
+      ></v-text-field>
 
-      <v-text-field v-model="obj.Price" type="number" label="Preço unitario" prefix="R$" required outlined></v-text-field>
+      <v-text-field
+        v-model="obj.Price"
+        type="number"
+        label="Preço unitario"
+        prefix="R$"
+        required
+        outlined
+      ></v-text-field>
 
-      <v-text-field v-model="obj.PriceSale" type="number" label="Preço revenda" prefix="R$" required
-        outlined></v-text-field>
+      <v-text-field
+        v-model="obj.PriceSale"
+        type="number"
+        label="Preço revenda"
+        prefix="R$"
+        required
+        outlined
+      ></v-text-field>
 
-      <v-btn :disabled="!valid" color="success" class="mr-4" :loading="loading" @click="validate">
+      <v-btn
+        :disabled="!valid"
+        color="success"
+        class="mr-4"
+        :loading="loading"
+        @click="validate"
+      >
         Registrar
       </v-btn>
     </v-form>
@@ -29,7 +58,7 @@ export default {
       Price: null,
       PriceSale: null,
       StockAmount: 0,
-      userId: ''
+      userId: '',
     },
   }),
 
@@ -41,7 +70,6 @@ export default {
       this.$emit('product', this.obj)
       // this.loading=true
     },
-
   },
 }
 </script>

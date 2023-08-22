@@ -1,14 +1,34 @@
 <template>
   <v-app dark>
-    <v-navigation-drawer style="background-color: #f5f5f5;" v-model="drawer" :mini-variant="miniVariant"
-      :clipped="clipped" fixed app>
+    <v-navigation-drawer
+      style="background-color: #f5f5f5"
+      v-model="drawer"
+      :mini-variant="miniVariant"
+      :clipped="clipped"
+      fixed
+      app
+    >
       <v-list>
-        <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router exact>
+        <v-list-item
+          v-for="(item, i) in items"
+          :key="i"
+          :to="item.to"
+          router
+          exact
+        >
           <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item v-if="user.permission == 0" to="/adminRegister">
+          <v-list-item-action>
+            <v-icon>mdi-finance</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Registro de Usuario</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -20,9 +40,8 @@
       <div>
         <cardAvatar></cardAvatar>
       </div>
-
     </v-app-bar>
-    <v-main style="background-color: #f5f5f5;">
+    <v-main style="background-color: #f5f5f5">
       <v-container>
         <Nuxt />
       </v-container>
@@ -45,36 +64,52 @@
 
 <script>
 export default {
-  name: "DefaultLayout",
+  name: 'DefaultLayout',
+  created() {
+    this.user.id = this.$store.state.user.user.id
+    this.getuserpermission()
+  },
   data() {
     return {
+      user: {
+        id: null,
+        permission: null,
+      },
       clipped: false,
       drawer: false,
       fixed: false,
       items: [
         {
-          icon: "mdi-widgets",
-          title: "Estoque",
-          to: "/listaproduto",
+          icon: 'mdi-widgets',
+          title: 'Estoque',
+          to: '/listaproduto',
         },
         {
-          icon: " mdi-arrow-up-bold-box-outline",
-          title: "Lista de movimentação",
-          to: "/listamovimentacao",
+          icon: ' mdi-arrow-up-bold-box-outline',
+          title: 'Lista de movimentação',
+          to: '/listamovimentacao',
         },
         {
-          icon: " mdi-finance",
-          title: "Graficos",
-          to: "/graphs",
+          icon: ' mdi-finance',
+          title: 'Graficos',
+          to: '/graphs',
         },
       ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: "Estoque",
-    };
+      title: 'Estoque',
+    }
   },
-
-
+  methods: {
+    async getuserpermission() {
+      await this.$axios
+        .$get(`user/getbyid?id=${this.user.id}`)
+        .then((response) => {
+          this.user.permission = response.permission
+        })
+        .catch(() => {})
+    },
+  },
 }
 </script>

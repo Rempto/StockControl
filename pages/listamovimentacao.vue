@@ -20,7 +20,12 @@
     <div class="pa-2 primary-card">
       <v-row class="ma-0 justify-space-between" style="align-items: center">
         <v-col :cols="$vuetify.breakpoint.smAndDown ? '2' : '6'" class="pa-0">
-          <v-btn class="white--text" color="blue" @click="addButton">
+          <v-btn
+            v-if="userPermission !== 2"
+            class="white--text"
+            color="blue"
+            @click="addButton"
+          >
             <span v-if="!$vuetify.breakpoint.xs">adicionar</span>
             <v-icon size="15">mdi-plus</v-icon>
           </v-btn>
@@ -103,7 +108,11 @@
                     }}
                   </td>
                   <td>
-                    <v-dialog transition="dialog" max-width="600">
+                    <v-dialog
+                      v-if="userPermission !== 2"
+                      transition="dialog"
+                      max-width="600"
+                    >
                       <template v-slot:activator="{ on, attrs }">
                         <v-btn v-bind="attrs" v-on="on" icon rounded light>
                           <v-icon> mdi mdi-trash-can-outline </v-icon>
@@ -158,6 +167,7 @@
 export default {
   data() {
     return {
+      userPermission: null,
       filter: false,
       items: [
         { name: 'Entrada', value: 1 },
@@ -172,6 +182,7 @@ export default {
     }
   },
   mounted() {
+    this.userPermission = this.$store.state.user.user.permission
     this.paginationMovement()
   },
 

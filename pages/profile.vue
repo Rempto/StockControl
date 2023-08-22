@@ -142,7 +142,7 @@ export default {
     this.user.name = this.$store.state.user.user.name
     this.user.email = this.$store.state.user.user.email
     this.user.id = this.$store.state.user.user.id
-    this.user.initials = this.user.email[0]
+    this.user.initials = this.user.name[0]
     this.getuserAvatar()
   },
 

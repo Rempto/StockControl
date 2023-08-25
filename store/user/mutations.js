@@ -8,6 +8,7 @@ export default {
   setExpires(state, payload) {
     state.dateExpires = payload
   },
+ 
   logOut(state) {
     state.user = null
     state.token = null

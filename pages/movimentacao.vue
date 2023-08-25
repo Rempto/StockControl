@@ -1,12 +1,15 @@
 <template>
   <div>
     <header>
-      <v-card class=" pa-8 theme--light" style="border-radius: 20px; margin-top: 5px;">
+      <v-card
+        class="pa-8 theme--light"
+        style="border-radius: 20px; margin-top: 5px"
+      >
         <v-row>
           <v-col>
             <v-flex>
               <!---->
-              <h2 id="title" class=" mb-3 ml-1">Cadastro de Movimentação</h2>
+              <h2 id="title" class="mb-3 ml-1">Cadastro de Movimentação</h2>
             </v-flex>
             <p class="paragraph-2">Faça suas movimentações</p>
           </v-col>
@@ -15,9 +18,7 @@
     </header>
     <div class="pa-2 primary-card">
       <v-btn class="d-flex white--text" color="blue" @click="backButton">
-        <v-icon dark left>
-          mdi-arrow-left
-        </v-icon>Back
+        <v-icon dark left> mdi-arrow-left </v-icon>Back
       </v-btn>
     </div>
     <div class="pa-3">
@@ -39,42 +40,40 @@ export default {
         .then((response) => {
           this.$toast.success(response)
         })
-        .catch(() => { })
+        .catch(() => {})
     },
     backButton() {
       this.$router.push('/listamovimentacao')
     },
     async getProduct(obj) {
-
-      await this.$axios.$get(`product/getbyid?id=${obj.ProductId}`).then((response) => {
-        const prod = {
-          id: response.id,
-          name: response.name,
-          price: response.price,
-          priceSale: response.priceSale,
-          stockAmount: 0,
-        }
-        if (obj.Move === 0) {
-
-          prod.stockAmount = response.stockAmount - obj.Qtd
-        } else {
-          prod.stockAmount = response.stockAmount + parseInt(obj.Qtd)
-        }
-        if (prod.stockAmount >= 0) {
-          this.updateProduct(prod)
-          this.CreateMovement(obj)
-          this.backButton()
-        }
-        else {
-          this.$toast.error("Quantidade acima do estoque!")
-        }
-      }).catch(() => { })
-    }
-    ,
+      await this.$axios
+        .$get(`product/getbyid?id=${obj.ProductId}`)
+        .then((response) => {
+          const prod = {
+            id: response.id,
+            name: response.name,
+            price: response.price,
+            priceSale: response.priceSale,
+            stockAmount: 0,
+          }
+          if (obj.Move === 0) {
+            prod.stockAmount = response.stockAmount - obj.Qtd
+          } else {
+            prod.stockAmount = response.stockAmount + parseInt(obj.Qtd)
+          }
+          if (prod.stockAmount >= 0) {
+            this.updateProduct(prod)
+            this.CreateMovement(obj)
+            this.backButton()
+          } else {
+            this.$toast.error('Quantidade acima do estoque!')
+          }
+        })
+        .catch(() => {})
+    },
     async updateProduct(prod) {
-      await this.$axios.$put(`product/edit`, prod).then(() => {
-      })
-    }
+      await this.$axios.$put(`product/edit`, prod).then(() => {})
+    },
   },
 }
 </script>

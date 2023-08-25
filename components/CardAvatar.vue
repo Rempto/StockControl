@@ -66,7 +66,7 @@ export default {
   created() {
     this.user.name = this.$store.state.user.user.name
     this.user.email = this.$store.state.user.user.email
-    this.user.initials = this.user.email[0]
+    this.user.initials = this.user.name[0]
     this.user.id = this.$store.state.user.user.id
     this.getuserAvatar()
   },

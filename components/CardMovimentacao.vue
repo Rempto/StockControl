@@ -1,23 +1,63 @@
 <template>
-  <v-card class="primary-card pa-10 theme--light" style="border-radius: 20px; margin-top: 5px;">
-
+  <v-card
+    class="primary-card pa-10 theme--light"
+    style="border-radius: 20px; margin-top: 5px"
+  >
+    <h2>nova movimentação</h2>
     <v-form ref="form" v-model="valid" lazy-validation>
-      <v-select label="Produto" v-model="obj.ProductId" :items="items"
-        :rules="[(v) => (!!v && v.length > 0) || 'Campo obrigatório']" item-text="name" item-value="id" required outlined
-        @change="func"></v-select>
+      <v-select
+        label="Produto"
+        v-model="obj.ProductId"
+        :items="items"
+        :rules="[(v) => (!!v && v.length > 0) || 'Campo obrigatório']"
+        item-text="name"
+        item-value="id"
+        required
+        outlined
+        @change="func"
+      ></v-select>
 
-      <v-text-field v-model="obj.Qtd" type="number" label="Quantidade" required outlined>
+      <v-text-field
+        v-model="obj.Qtd"
+        type="number"
+        label="Quantidade"
+        required
+        outlined
+      >
       </v-text-field>
-      <v-text-field v-model="obj.PriceUnit" label="Preço Unitario" required outlined disabled>
+      <v-text-field
+        v-model="obj.PriceUnit"
+        label="Preço Unitario"
+        required
+        outlined
+        disabled
+      >
       </v-text-field>
       <!-- v-model="obj.PriceTotal" -->
-      <v-text-field :value="totalPrice" label="Valor Total" required outlined disabled>
+      <v-text-field
+        :value="totalPrice"
+        label="Valor Total"
+        required
+        outlined
+        disabled
+      >
       </v-text-field>
       <v-radio-group v-model="obj.Move" @change="func2">
-        <v-radio v-for="(item, index) in movements" :key="index" :label="item.name" :value="item.value"></v-radio>
+        <v-radio
+          v-for="(item, index) in movements"
+          :key="index"
+          :label="item.name"
+          :value="item.value"
+        ></v-radio>
       </v-radio-group>
 
-      <v-btn :disabled="!valid" color="success" class="mr-4" :loading="loading" @click="validate">
+      <v-btn
+        :disabled="!valid"
+        color="success"
+        class="mr-4"
+        :loading="loading"
+        @click="validate"
+      >
         Registrar
       </v-btn>
     </v-form>
@@ -59,7 +99,6 @@ export default {
   methods: {
     validate() {
       if (!this.$refs.form.validate()) {
-
         return
       }
       this.obj.PriceTotal = this.totalPrice
@@ -72,13 +111,11 @@ export default {
         .then((response) => {
           this.items = response
         })
-        .catch(() => {
-        })
+        .catch(() => {})
     },
     func() {
       const aux = this.items.filter((x) => x.id === this.obj.ProductId)[0]
       if (aux != null) {
-
         this.obj.PriceUnit = aux.priceSale
         this.obj.ProductName = aux.name
       }
@@ -92,7 +129,7 @@ export default {
           this.obj.PriceUnit = aux.price
         }
       }
-    }
-  }
+    },
+  },
 }
 </script>

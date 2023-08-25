@@ -225,7 +225,7 @@ export default {
         name: '',
         stockAmount: 0,
         price: null,
-        userId: '0ed4baf5-16a4-4bc5-9513-5fe5b134c7a9',
+        userId: null,
         priceSale: 0,
       },
 
@@ -236,6 +236,7 @@ export default {
   },
   created() {
     this.userPermission = this.$store.state.user.user.permission
+    this.prod.userId = this.$store.state.user.user.id
     this.paginationProd()
   },
   methods: {
@@ -256,7 +257,7 @@ export default {
     },
     async deleteprod() {
       await this.$axios
-        .$delete(`product/delete?id=${this.prod.id}`)
+        .$delete(`product/delete?id=${this.prod.id}&userId=${this.prod.userId}`)
         .then((response) => {
           this.$toast.success(response)
           this.paginationProd()

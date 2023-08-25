@@ -183,13 +183,14 @@ export default {
   },
   mounted() {
     this.userPermission = this.$store.state.user.user.permission
+    this.userId = this.$store.state.user.user.id
     this.paginationMovement()
   },
 
   methods: {
     async deleteMovement(id) {
       await this.$axios
-        .$delete(`movement/delete?id=${id}`)
+        .$delete(`movement/delete?id=${id}&userId=${this.userId}`)
         .then((response) => {
           this.$toast.success(response)
           this.paginationMovement()

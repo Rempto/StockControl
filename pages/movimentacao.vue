@@ -62,7 +62,6 @@ export default {
             prod.stockAmount = response.stockAmount + parseInt(obj.Qtd)
           }
           if (prod.stockAmount >= 0) {
-            this.updateProduct(prod)
             this.CreateMovement(obj)
             this.backButton()
           } else {
@@ -70,9 +69,6 @@ export default {
           }
         })
         .catch(() => {})
-    },
-    async updateProduct(prod) {
-      await this.$axios.$put(`product/edit`, prod).then(() => {})
     },
   },
 }

@@ -49,11 +49,13 @@
               </thead>
               <tbody>
                 <tr
-                  v-for="item in notifications"
+                  v-for="(item, index) in notifications"
                   :key="item.id"
-                  @click="setVizualized(item.id)"
+                  @click="setVizualized(item.id, index)"
                 >
-                  <td>{{ item.title }}</td>
+                  <td :style="!item.isVisualized ? 'font-weight: bold' : ''">
+                    {{ item.title }}
+                  </td>
                   <td>{{ item.description }}</td>
 
                   <td>
@@ -115,10 +117,12 @@ export default {
         })
         .catch(() => {})
     },
-    async setVizualized(id) {
+    async setVizualized(id, index) {
       await this.$axios
         .$put(`notification/set-visualized?id=${id}`)
-        .then(() => {})
+        .then(() => {
+          this.notifications[index].isVisualized = true
+        })
         .catch(() => {})
     },
   },

@@ -41,22 +41,43 @@
           <template v-slot:activator="{ on, attrs }">
             <v-btn icon color="white" dark v-bind="attrs" v-on="on">
               <v-icon>mdi-bell-outline</v-icon>
+              <v-badge
+                v-if="notifications.length > 0"
+                bottom
+                color="green"
+                :content="notifications.length"
+              ></v-badge>
             </v-btn>
           </template>
           <v-list>
             <v-list-item
+              two-line
               v-for="(item, index) in notifications"
               :key="index"
               @click="setVizualized(item.id)"
             >
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
-              <v-list-item-subtitle>{{
-                item.description
-              }}</v-list-item-subtitle>
+              <v-list-item-content>
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+                <v-list-item-subtitle class="pa-2">{{
+                  item.description
+                }}</v-list-item-subtitle>
+              </v-list-item-content>
             </v-list-item>
-            <v-list-item to="/notifications"
-              ><v-list-item-title>...</v-list-item-title></v-list-item
-            >
+            <div class="d-flex justify-space-between">
+              <v-btn class="pl-4" icon rounded light to="/notifications"
+                ><v-icon>mdi-format-list-bulleted</v-icon></v-btn
+              >
+              <v-btn
+                v-if="notifications.length > 0"
+                class="pr-4"
+                icon
+                rounded
+                light
+                @click="cleanNotification()"
+              >
+                <v-icon> mdi-eraser </v-icon>
+              </v-btn>
+            </div>
           </v-list>
         </v-menu>
       </div>
@@ -89,10 +110,12 @@
 <script>
 export default {
   name: 'DefaultLayout',
+  destroy() {
+    this.socketInstance.close()
+  },
   created() {
     this.user.id = this.$store.state.user.user.id
     this.getuserpermission()
-    this.getUserNotification()
   },
   data() {
     return {
@@ -125,9 +148,32 @@ export default {
       right: true,
       rightDrawer: false,
       title: 'Estoque',
+      socketInstance: null,
     }
   },
+  fetch() {
+    this.messageSocket()
+    this.getUserNotification()
+  },
   methods: {
+    messageSocket() {
+      if (this.socketInstance) {
+        this.socketInstance.close()
+      }
+
+      this.socketInstance = new WebSocket(
+        `${process.env.API_KEY_SOCKET}?chatId=${'adminNotifications'}&userId=${
+          this.user.id
+        }`
+      )
+
+      const $context = this
+      this.socketInstance.onmessage = async function (e) {
+        const socketMessage = await JSON.parse(e.data)
+        console.log(socketMessage)
+        $context.getUserNotification()
+      }
+    },
     async getuserpermission() {
       await this.$axios
         .$get(`user/getbyid?id=${this.user.id}`)
@@ -151,6 +197,11 @@ export default {
           this.getUserNotification()
         })
         .catch(() => {})
+    },
+    cleanNotification() {
+      this.notifications.forEach((notification) => {
+        this.setVizualized(notification.id)
+      })
     },
   },
 }

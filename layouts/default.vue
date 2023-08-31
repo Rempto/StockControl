@@ -39,7 +39,15 @@
       <div class="text-center">
         <v-menu offset-y v-if="user.permission == 0">
           <template v-slot:activator="{ on, attrs }">
-            <v-btn icon color="white" dark v-bind="attrs" v-on="on">
+            <v-btn
+              class="notification-bell"
+              :class="{ 'bell-ring': isNotification }"
+              icon
+              color="white"
+              dark
+              v-bind="attrs"
+              v-on="on"
+            >
               <v-icon>mdi-bell-outline</v-icon>
               <v-badge
                 v-if="notifications.length > 0"
@@ -149,6 +157,7 @@ export default {
       rightDrawer: false,
       title: 'Estoque',
       socketInstance: null,
+      isNotification: false,
     }
   },
   fetch() {
@@ -187,6 +196,9 @@ export default {
         .$get(`notification/get-by-id?id=${this.user.id}`)
         .then((response) => {
           this.notifications = response
+          if (this.notifications.length > 0) {
+            this.toggleNotification()
+          }
         })
         .catch(() => {})
     },
@@ -203,6 +215,41 @@ export default {
         this.setVizualized(notification.id)
       })
     },
+    toggleNotification() {
+      console.log('aaaa')
+      this.isNotification = true
+      setTimeout(() => {
+        this.isNotification = false
+      }, 1000)
+    },
   },
 }
 </script>
+
+<style scoped>
+.notification-bell {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.bell-ring {
+  animation: bellRingAnimation 0.5s ease-in-out;
+  transform-origin: top center;
+}
+
+@keyframes bellRingAnimation {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  20%,
+  60%,
+  80% {
+    transform: rotate(15deg);
+  }
+  40%,
+  100% {
+    transform: rotate(-15deg);
+  }
+}
+</style>

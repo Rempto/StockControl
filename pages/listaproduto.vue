@@ -62,8 +62,9 @@
                 <tr>
                   <th class="text-left">Nome</th>
                   <th class="text-left">Preço unitario</th>
-                  <th class="text-left">Qtd</th>
                   <th class="text-left">Valor de revenda</th>
+                  <th class="text-left">Qtd</th>
+
                   <th
                     role="columnheader"
                     scope="col"
@@ -78,8 +79,9 @@
                 <tr v-for="product in products" :key="product.id">
                   <td>{{ product.name }}</td>
                   <td>R$ {{ product.price.toFixed(2) }}</td>
-                  <td>{{ product.stockAmount }}</td>
                   <td>R$ {{ product.priceSale.toFixed(2) }}</td>
+                  <td>{{ product.stockAmount }}</td>
+
                   <td class="text-center">
                     <v-dialog transition="dialog" max-width="600">
                       <template v-slot:activator="{ on, attrs }">
@@ -119,14 +121,6 @@
                                 type="number"
                                 label="Preço unitario"
                                 prefix="R$"
-                                required
-                                outlined
-                              ></v-text-field>
-
-                              <v-text-field
-                                v-model="prod.stockAmount"
-                                type="number"
-                                label="Quantidade"
                                 required
                                 outlined
                               ></v-text-field>

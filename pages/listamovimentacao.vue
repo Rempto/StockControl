@@ -45,17 +45,21 @@
       </v-row>
 
       <v-row class="ma-0" style="align-items: center">
-        <v-col :cols="$vuetify.breakpoint.smAndDown ? '2' : '1'" class="pa-0">
+        <v-col
+          :cols="$vuetify.breakpoint.smAndDown ? '2' : '1'"
+          class="pa-0 mt-3"
+        >
           <v-btn class="white--text" color="blue" @click="filterclear">
             <v-icon>mdi-filter</v-icon>
           </v-btn>
         </v-col>
         <v-col
           :cols="$vuetify.breakpoint.smAndDown ? '6' : '4'"
-          class="pa-0 pl-4"
-          v-if="filter"
+          class="pa-0 ma-0"
         >
           <v-select
+            v-if="filter"
+            hide-details="auto"
             item-text="name"
             item-value="value"
             v-model="move"

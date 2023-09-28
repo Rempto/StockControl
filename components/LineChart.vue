@@ -192,7 +192,6 @@ export default {
       await this.$axios
         .$get(`movement/get-excel-file?${this.$convertToQueryString(model)}`)
         .then((response) => {
-          console.log(response)
           const linkSource = 'data:application/vnd.ms-excel;base64,' + response
           const downloadLink = document.createElement('a')
           downloadLink.href = linkSource

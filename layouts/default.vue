@@ -57,20 +57,26 @@
               ></v-badge>
             </v-btn>
           </template>
+
           <v-list>
-            <v-list-item
-              two-line
-              v-for="(item, index) in notifications"
-              :key="index"
-              @click="setVizualized(item.id)"
+            <v-container
+              class="ma-0 pa-0"
+              style="max-height: 300px; overflow-y: auto"
             >
-              <v-list-item-content>
-                <v-list-item-title>{{ item.title }}</v-list-item-title>
-                <v-list-item-subtitle class="pa-2">{{
-                  item.description
-                }}</v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
+              <v-list-item
+                two-line
+                v-for="(item, index) in notifications"
+                :key="index"
+                @click="setVizualized(item.id)"
+              >
+                <v-list-item-content>
+                  <v-list-item-title>{{ item.title }}</v-list-item-title>
+                  <v-list-item-subtitle class="pa-2">{{
+                    item.description
+                  }}</v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-container>
             <div class="d-flex justify-space-between">
               <v-btn class="pl-4" icon rounded light to="/notifications"
                 ><v-icon>mdi-format-list-bulleted</v-icon></v-btn
@@ -90,6 +96,15 @@
         </v-menu>
       </div>
       <v-spacer />
+      <div class="text-center">
+        <v-menu offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn icon color="white" dark v-bind="attrs" v-on="on" to="/chats">
+              <v-icon>mdi-message-text-outline</v-icon>
+            </v-btn>
+          </template>
+        </v-menu>
+      </div>
       <div>
         <cardAvatar></cardAvatar>
       </div>
@@ -118,15 +133,20 @@
 <script>
 export default {
   name: 'DefaultLayout',
+
   destroy() {
     this.socketInstance.close()
   },
+
   created() {
     this.user.id = this.$store.state.user.user.id
     this.getuserpermission()
+    this.getPermission()
   },
   data() {
     return {
+      chats: [],
+      users: [],
       notifications: [],
       user: {
         id: null,
@@ -158,6 +178,11 @@ export default {
       title: 'Estoque',
       socketInstance: null,
       isNotification: false,
+
+      listenersStarted: false,
+      permissionGranted: false,
+      idToken: '',
+      loading: false,
     }
   },
   fetch() {
@@ -165,6 +190,48 @@ export default {
     this.getUserNotification()
   },
   methods: {
+    async requestPermission() {
+      try {
+        const permission = await Notification.requestPermission()
+        this.permissionGranted = permission === 'granted'
+      } catch (e) {
+        console.error(e)
+      }
+    },
+    async getPermission() {
+      await this.requestPermission()
+      if (this.permissionGranted) {
+        this.getIdToken()
+      }
+    },
+    async getIdToken() {
+      this.loading = true
+      let currentToken
+      try {
+        currentToken = await this.$fire.messaging.getToken()
+        if (currentToken) {
+          await this.$axios
+            .$post(
+              `pushNotification/create-push-notification?token=${currentToken}&userId=${this.user.id}`
+            )
+            .then(() => {})
+            .catch(() => {})
+        }
+      } catch (e) {
+        console.error('an error ocurred ')
+        this.idToken = ''
+        this.loading = false
+      }
+
+      if (currentToken) {
+        this.idToken = currentToken
+      } else {
+        this.idToken = ''
+      }
+
+      this.loading = false
+    },
+
     messageSocket() {
       if (this.socketInstance) {
         this.socketInstance.close()
@@ -178,9 +245,7 @@ export default {
 
       const $context = this
       this.socketInstance.onmessage = async function (e) {
-        const socketMessage = await JSON.parse(e.data)
-        console.log(socketMessage)
-        $context.getUserNotification()
+        await $context.getUserNotification()
       }
     },
     async getuserpermission() {
@@ -210,13 +275,15 @@ export default {
         })
         .catch(() => {})
     },
-    cleanNotification() {
-      this.notifications.forEach((notification) => {
-        this.setVizualized(notification.id)
-      })
+    async cleanNotification() {
+      await this.$axios
+        .$put(`notification/set-all-visualized?userId=${this.user.id}`)
+        .then(() => {
+          this.getUserNotification()
+        })
+        .catch(() => {})
     },
     toggleNotification() {
-      console.log('aaaa')
       this.isNotification = true
       setTimeout(() => {
         this.isNotification = false

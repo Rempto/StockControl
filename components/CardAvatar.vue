@@ -11,7 +11,7 @@
                 border-radius: 80px;
 
                 background-position: center center;
-                background-image: url('https://portal.keener.io/_nuxt/img/default-account.d1c835b.svg');
+
                 background-position: center center;
               "
             >
@@ -32,8 +32,6 @@
                 style="
                   border-radius: 80px;
 
-                  background-position: center center;
-                  background-image: url('https://portal.keener.io/_nuxt/img/default-account.d1c835b.svg');
                   background-position: center center;
                 "
               >

@@ -1,9 +1,10 @@
 import colors from 'vuetify/es5/util/colors'
 require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` })
-
+const fs = require('fs')
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
+  target:"static",
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -52,6 +53,7 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     'vue-toastification/nuxt',
+    '@nuxtjs/firebase'
   ],
   toast: {
     position: 'top-right',
@@ -67,6 +69,24 @@ export default {
     icon: true,
     rtl: false,
   },
+  firebase: {
+    config:{
+    apiKey: "AIzaSyBix73HHrvFUo_IwLvWeMEaihY4e3t9yS8",
+    authDomain: "notificationapp-e6a25.firebaseapp.com",
+    projectId: "notificationapp-e6a25",
+    storageBucket: "notificationapp-e6a25.appspot.com",
+    messagingSenderId: "616570992430",
+    appId: "1:616570992430:web:7d95ef1047e8cb5e07acbf",
+    measurementId: "G-RZVWZWMKFH"
+  },
+  services:{
+    messaging:{
+      createServiceWorker:true,
+      fcmPublicVapidKey:'BKqLYzejApYU6nn3DxfmbzIzr35LUAquQiLY3iPKKfUHjBjFNC2VDJ95UzWVdiM1uwvFaNBL9XehpftTc6oP3yk',
+      inject: fs.readFileSync('./serviceWorker.js')
+    }
+  }
+},
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308

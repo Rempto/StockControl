@@ -1,6 +1,6 @@
 <template>
   <v-row class="justify-center ma-0 mt-12">
-    <v-col :cols="$vuetify.breakpoint.smAndDown ? '12' : '4'" class="pa-0">
+    <v-col :cols="$vuetify.breakpoint.xs ? '12' : '5'" class="pa-0">
       <card-login title="Registro" @register="CreateUser"></card-login>
     </v-col>
   </v-row>

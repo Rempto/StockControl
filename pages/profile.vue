@@ -189,7 +189,6 @@ export default {
       const formData = new FormData()
       formData.append('Avatar', this.selectedFile)
       formData.append('UserId', this.user.id)
-      console.log(formData)
 
       await this.$axios
         .$post(`user/update-avatar`, formData)
@@ -198,7 +197,6 @@ export default {
           this.getuserAvatar()
         })
         .catch((error) => {
-          console.log(error)
           this.$toast.error(error.response.data)
         })
     },

@@ -162,7 +162,6 @@ export default {
       }
     },
     async updateUserPermission() {
-      console.log(this.obj)
       await this.$axios
         .$put(`user/edit-permission`, this.obj)
         .then((response) => {

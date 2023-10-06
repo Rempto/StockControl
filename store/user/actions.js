@@ -18,4 +18,8 @@ export default {
   logOut({ commit, dispatch }) {
     commit('logOut')
   },
+
+  update({commit,dispatch},obj){
+    commit('setUser',obj)
+  }
 }

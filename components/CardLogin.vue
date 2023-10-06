@@ -10,6 +10,7 @@
         v-if="!isLogin"
         v-model="obj.Name"
         label="Nome"
+        :rules="[(v) => (!!v && v.length > 0) || 'Campo obrigatório']"
         required
         outlined
       ></v-text-field>
@@ -24,10 +25,13 @@
 
       <v-text-field
         v-model="obj.Password"
-        type="password"
+        :type="seePassword ? 'text' : 'password'"
         label="Senha"
+        :rules="[(v) => (!!v && v.length > 0) || 'Campo obrigatório']"
         required
         outlined
+        :append-icon="'mdi-eye'"
+        @click:append="seePassword = !seePassword"
       ></v-text-field>
 
       <v-row class="ma-0">
@@ -73,6 +77,7 @@ export default {
     },
   },
   data: () => ({
+    seePassword: false,
     permissions: [
       { name: 'Admin', value: 0 },
       { name: 'operador', value: 1 },
@@ -81,8 +86,8 @@ export default {
     loading: false,
     valid: true,
     emailRules: [
-      (v) => !!v || 'E-mail is required',
-      (v) => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+      (v) => !!v || 'Um E-mail é necessario',
+      (v) => /.+@.+\..+/.test(v) || 'O E-mail não é valido',
     ],
     obj: {
       Name: '',

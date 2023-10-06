@@ -136,7 +136,9 @@
                             </div>
                           </v-card-text>
                           <v-card-actions class="justify-end">
-                            <v-btn text @click="updateProduct"
+                            <v-btn
+                              text
+                              @click="updateProduct() && (dialog.value = false)"
                               ><v-icon small> mdi mdi-pencil </v-icon
                               >Editar</v-btn
                             >

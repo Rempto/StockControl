@@ -98,9 +98,11 @@
 <script>
 export default {
   created() {
+    this.userId = this.$store.state.user.user.id
     this.UserList()
   },
   data: () => ({
+    userId: null,
     btnClick: true,
     permissions: [
       { name: 'Admin', value: 0 },
@@ -165,7 +167,11 @@ export default {
       await this.$axios
         .$put(`user/edit-permission`, this.obj)
         .then((response) => {
-          this.$toast.success(response)
+          this.$toast.success(response.msg)
+          if (response.user.email === this.$store.state.user.user.email) {
+            this.$store.dispatch('user/update', response.user)
+            this.$router.push('/listaproduto')
+          }
         })
         .catch((error) => {
           this.$toast.error(error.response.data)

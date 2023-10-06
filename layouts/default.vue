@@ -77,13 +77,12 @@
                 </v-list-item-content>
               </v-list-item>
             </v-container>
-            <div class="d-flex justify-space-between">
-              <v-btn class="pl-4" icon rounded light to="/notifications"
+            <div class="d-flex justify-space-between ma-2">
+              <v-btn icon rounded light to="/notifications"
                 ><v-icon>mdi-format-list-bulleted</v-icon></v-btn
               >
               <v-btn
                 v-if="notifications.length > 0"
-                class="pr-4"
                 icon
                 rounded
                 light

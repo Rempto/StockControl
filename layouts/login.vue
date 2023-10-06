@@ -1,7 +1,7 @@
 <template>
   <v-app dark>
     <v-navigation-drawer
-    style="background-color: #f5f5f5;"
+      style="background-color: #f5f5f5"
       v-model="drawer"
       :mini-variant="miniVariant"
       :clipped="clipped"
@@ -27,10 +27,10 @@
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app color="blue">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title class="white--text">{{ title }}</v-toolbar-title>
+
       <v-spacer />
     </v-app-bar>
-    <v-main style="background-color: #f5f5f5;">
+    <v-main style="background-color: #f5f5f5">
       <v-container>
         <Nuxt />
       </v-container>
@@ -61,7 +61,6 @@ export default {
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'Estoque',
     }
   },
 }

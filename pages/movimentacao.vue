@@ -39,6 +39,7 @@ export default {
         .$post(`movement/post`, obj)
         .then((response) => {
           this.$toast.success(response)
+          this.backButton()
         })
         .catch(() => {})
     },
@@ -63,7 +64,6 @@ export default {
           }
           if (prod.stockAmount >= 0) {
             this.CreateMovement(obj)
-            this.backButton()
           } else {
             this.$toast.error('Quantidade acima do estoque!')
           }

@@ -15,7 +15,7 @@
                       dark
                       v-bind="attrs"
                       v-on="on"
-                      @click="UserList()"
+                      @click="setFiltered"
                     >
                       <v-icon color="blue">mdi-account-plus-outline</v-icon>
                     </v-btn>
@@ -23,6 +23,18 @@
 
                   <v-list>
                     <v-container style="height: 470px; overflow-y: auto">
+                      <v-text-field
+                        class="pa-2"
+                        v-model="searchKeyword"
+                        label="pesquisar"
+                        filled
+                        rounded
+                        dense
+                        hide-details="auto"
+                        @input="filtered"
+                        @click.stop.prevent
+                      >
+                      </v-text-field>
                       <v-list-item
                         v-for="user in users"
                         :key="user.id"
@@ -60,6 +72,17 @@
             </div>
 
             <v-divider></v-divider>
+            <v-text-field
+              class="pa-2"
+              v-model="searchKeywordChat"
+              label="pesquisar"
+              filled
+              rounded
+              dense
+              hide-details="auto"
+              @input="ChatList"
+            >
+            </v-text-field>
             <v-container style="height: 470px; overflow-y: auto">
               <v-list-item
                 v-for="chat in chats"
@@ -93,7 +116,7 @@
                   }}</v-list-item-title>
 
                   <v-list-item-subtitle
-                    v-if="chat.messages"
+                    v-if="chat.messages.length > 0"
                     :style="
                       !chat.messages[chat.messages.length - 1].isVisualized &&
                       chat.messages[chat.messages.length - 1].userId != user.id
@@ -154,7 +177,7 @@
             </v-card>
           </div>
 
-          <div id="scroll-div" style="height: 450px; overflow-y: scroll">
+          <div id="scroll-div" style="height: 520px; overflow-y: scroll">
             <div class="ma-1" style="display: flex; justify-content: center">
               <v-btn
                 v-if="this.moreToSee"
@@ -190,7 +213,7 @@
                       <v-img
                         v-if="file.filePath && file.isImage"
                         :src="file.filePath"
-                        @click="dowloadFile(file.filePath)"
+                        @click="openImage(file.filePath)"
                         class="ma-2"
                         style="
                           border-radius: 20px;
@@ -198,6 +221,7 @@
                           max-width: 350px;
                         "
                       ></v-img>
+
                       <v-img
                         v-if="
                           file.filePath &&
@@ -243,11 +267,7 @@
                           "
                           style="font-size: small"
                         >
-                          {{
-                            $moment(file.createdAt)
-                              .locale('pt-br')
-                              .format(' h:mm')
-                          }}
+                          {{ $moment(file.createdAt).format(' HH:mm') }}
                         </span>
                         <v-icon
                           v-if="file.userId === user.id"
@@ -308,6 +328,7 @@
                     @click:clear="clearMessage"
                     @keyup.enter="callService()"
                     filled
+                    required
                     rounded
                     dense
                     hide-details="auto"
@@ -352,6 +373,8 @@ export default {
   },
   data() {
     return {
+      searchKeywordChat: '',
+      searchKeyword: '',
       recording: false,
       mediaRecorder: null,
       audioBlob: null,
@@ -367,7 +390,7 @@ export default {
       base64Data: null,
       messageType: 0,
       alreadyHasSocket: false,
-      message: null,
+      message: '',
       marker: true,
       messages: [],
       chats: [],
@@ -395,9 +418,24 @@ export default {
     }
   },
   methods: {
+    setFiltered() {
+      this.searchKeyword = ''
+      this.filtered()
+    },
+    async filtered() {
+      await this.$axios
+        .$get(`user/get-user-by-name?search=${this.searchKeyword}`)
+        .then((response) => {
+          console.log(response)
+          this.users = response
+        })
+        .catch(() => {})
+    },
     async ChatList() {
       await this.$axios
-        .$get(`chat/get-chats?userId=${this.user.id}`)
+        .$get(
+          `chat/get-chats?userId=${this.user.id}&search=${this.searchKeywordChat}`
+        )
         .then((response) => {
           this.chats = response
 
@@ -600,9 +638,7 @@ export default {
         .catch(() => {})
     },
     async sendMessage() {
-      if (this.messageType === 0 && this.message.trim() === '') {
-        this.clearMessage()
-      } else {
+      if (this.message.trim() !== '') {
         const model = {
           messageContent: this.message,
           messageType: this.messageType,
@@ -627,7 +663,7 @@ export default {
     },
 
     clearMessage() {
-      this.message = null
+      this.message = ''
       this.messageType = 0
       this.fileExtention = null
       this.page = 1
@@ -664,11 +700,18 @@ export default {
       this.chatSelector = true
     },
     dowloadFile(response) {
-      const linkSource = 'data:application/vnd.ms-excel;base64,' + response
+      console.log(response)
+      const list = response.split('.')
+      const fileExtention = list[list.length - 1]
+      const linkSource = response
       const downloadLink = document.createElement('a')
       downloadLink.href = linkSource
-      downloadLink.download = 'arquivo.' + 'xlsx'
+      downloadLink.download = 'arquivo.' + fileExtention
       downloadLink.click()
+    },
+    openImage(file) {
+      // Abra a imagem em uma nova guia
+      window.open(file, '_blank')
     },
   },
 }

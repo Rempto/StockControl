@@ -18,6 +18,7 @@ export default {
         .$post(`user/post`, obj)
         .then((response) => {
           this.$toast.success(response)
+          this.$router.push('/')
         })
         .catch((error) => {
           this.$toast.error(error.response.data)

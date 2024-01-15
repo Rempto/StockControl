@@ -11,12 +11,12 @@
             v-model="email"
             :rules="emailRules"
             label="Email"
-            @keyup.enter="sendEmail"
+            @keyup.enter="forgotPassword"
             required
             outlined
           ></v-text-field>
 
-          <v-btn color="success" @click="sendEmail"> Enviar </v-btn>
+          <v-btn color="success" @click="forgotPassword"> Enviar </v-btn>
         </v-form>
       </v-card>
     </v-col>
@@ -37,10 +37,10 @@ export default {
     email: '',
   }),
   methods: {
-    async sendEmail() {
+    async forgotPassword() {
       if (this.email.trim() !== '') {
         await this.$axios
-          .$get(`user/send-email?email=${this.email}`)
+          .$get(`user/forgot-password?email=${this.email}`)
           .then((response) => {
             this.$toast.success(response)
           })

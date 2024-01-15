@@ -6,12 +6,11 @@ export default {
         commit('setUser', response.user)
         commit('setToken', response.token)
         commit('setExpires', response.dateExpires)
-       
 
-        this.$router.push('/listaproduto')
+
+        this.$router.push('/estoque')
       })
-      .catch((error) => {
-        this.$toast.error(error.response.data)
+      .catch(() => {
       })
   },
 
@@ -19,7 +18,7 @@ export default {
     commit('logOut')
   },
 
-  update({commit,dispatch},obj){
-    commit('setUser',obj)
+  update({ commit, dispatch }, obj) {
+    commit('setUser', obj)
   }
 }

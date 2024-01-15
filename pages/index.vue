@@ -1,11 +1,15 @@
 <template>
   <v-row class="justify-center ma-0 mt-12">
-    <v-col :cols="$vuetify.breakpoint.xs ? '12' : '5'" class="pa-0">
-      <card-login
+    <v-col
+      :cols="$vuetify.breakpoint.xs ? '12' : '5'"
+      class="pa-0"
+      style="display: flex; justify-content: center"
+    >
+      <CardRegister
         title="Login"
         :is-login="true"
         @login="LoginUser"
-      ></card-login>
+      ></CardRegister>
     </v-col>
   </v-row>
 </template>

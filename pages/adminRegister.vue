@@ -128,7 +128,7 @@ export default {
     async CreateUser() {
       if (this.btnClick) {
         await this.$axios
-          .$post(`user/post`, this.obj)
+          .$post(`user/add`, this.obj)
           .then((response) => {
             this.$toast.success(response)
           })
@@ -170,7 +170,7 @@ export default {
           this.$toast.success(response.msg)
           if (response.user.email === this.$store.state.user.user.email) {
             this.$store.dispatch('user/update', response.user)
-            this.$router.push('/listaproduto')
+            this.$router.push('/estoque')
           }
         })
         .catch((error) => {

@@ -142,7 +142,7 @@
             </v-container>
           </v-list>
           <div class="pa-2 primary-card">
-            <v-btn class="d-flex white--text" color="blue" to="/listaproduto">
+            <v-btn class="d-flex white--text" color="blue" to="/estoque">
               <v-icon dark left> mdi-arrow-left </v-icon>Back
             </v-btn>
           </div>
@@ -203,7 +203,7 @@
                   >
                     <div
                       class="pa-2"
-                      v-bind:style="
+                      :style="
                         file.userId === user.id
                           ? ' background-color: dodgerblue;'
                           : ' background-color:grey;'
@@ -213,13 +213,13 @@
                       <v-img
                         v-if="file.filePath && file.isImage"
                         :src="file.filePath"
-                        @click="openImage(file.filePath)"
                         class="ma-2"
                         style="
                           border-radius: 20px;
                           padding: 5px;
                           max-width: 350px;
                         "
+                        @click="openImage(file.filePath)"
                       ></v-img>
 
                       <v-img
@@ -230,13 +230,13 @@
                         "
                         :key="updateImage"
                         src="/pdf-to-pdfa.svg"
-                        @click="dowloadFile(file.filePath)"
                         class="ma-2"
                         style="
                           border-radius: 20px;
                           padding: 5px;
                           max-width: 350px;
                         "
+                        @click="dowloadFile(file.filePath)"
                       ></v-img>
 
                       <audio
@@ -323,15 +323,15 @@
                     clearable
                     label="Message"
                     type="text"
-                    @click:append-inner="toggleMarker"
-                    @click:append="callService()"
-                    @click:clear="clearMessage"
-                    @keyup.enter="callService()"
                     filled
                     required
                     rounded
                     dense
                     hide-details="auto"
+                    @click:append-inner="toggleMarker"
+                    @click:append="callService()"
+                    @click:clear="clearMessage"
+                    @keyup.enter="callService()"
                   ></v-text-field>
 
                   <v-btn
@@ -361,16 +361,6 @@
 
 <script>
 export default {
-  destroy() {
-    this.socketInstance.close()
-  },
-
-  created() {
-    this.user.id = this.$store.state.user.user.id
-
-    this.userSocket()
-    this.ChatList()
-  },
   data() {
     return {
       searchKeywordChat: '',
@@ -417,6 +407,18 @@ export default {
       isNotification: false,
     }
   },
+
+  destroy() {
+    this.socketInstance.close()
+  },
+
+  created() {
+    this.user.id = this.$store.state.user.user.id
+
+    this.userSocket()
+    this.ChatList()
+  },
+
   methods: {
     setFiltered() {
       this.searchKeyword = ''
@@ -426,15 +428,14 @@ export default {
       await this.$axios
         .$get(`user/get-user-by-name?search=${this.searchKeyword}`)
         .then((response) => {
-          console.log(response)
-          this.users = response
+          this.users = response.filter((x) => x.id !== this.user.id)
         })
         .catch(() => {})
     },
     async ChatList() {
       await this.$axios
         .$get(
-          `chat/get-chats?userId=${this.user.id}&search=${this.searchKeywordChat}`
+          `chat/chats?userId=${this.user.id}&search=${this.searchKeywordChat}`
         )
         .then((response) => {
           this.chats = response
@@ -510,7 +511,7 @@ export default {
       this.page = this.page + 1
       await this.$axios
         .$get(
-          `chat/get-messages?skip=${(this.page - 1) * this.itens}&take=${
+          `chat/messages?skip=${(this.page - 1) * this.itens}&take=${
             this.itens
           }&userId=${this.user.id}&recipientId=${this.chatUser.id}`
         )
@@ -596,7 +597,7 @@ export default {
       this.page = 1
       await this.$axios
         .$get(
-          `chat/get-messages?skip=${(this.page - 1) * this.itens}&take=${
+          `chat/messages?skip=${(this.page - 1) * this.itens}&take=${
             this.itens
           }&userId=${this.user.id}&recipientId=${this.chatUser.id}`
         )
@@ -700,7 +701,6 @@ export default {
       this.chatSelector = true
     },
     dowloadFile(response) {
-      console.log(response)
       const list = response.split('.')
       const fileExtention = list[list.length - 1]
       const linkSource = response

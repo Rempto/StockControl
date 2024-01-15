@@ -1,7 +1,7 @@
 <template>
   <v-app dark>
     <v-navigation-drawer
-      style="background-color: #f5f5f5"
+      style="background-color: #193153"
       v-model="drawer"
       :mini-variant="miniVariant"
       :clipped="clipped"
@@ -17,25 +17,30 @@
           exact
         >
           <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
+            <v-icon color="white">{{ item.icon }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
+            <v-list-item-title style="color: white">{{
+              item.title
+            }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item v-if="user.permission == 0" to="/adminRegister">
           <v-list-item-action>
-            <v-icon>mdi-account-outline</v-icon>
+            <v-icon color="white">mdi-account-outline</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Registro de Usuario</v-list-item-title>
+            <v-list-item-title style="color: white"
+              >Registro de Usuario</v-list-item-title
+            >
           </v-list-item-content>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar :clipped-left="clipped" fixed app color="blue">
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+    <v-app-bar :clipped-left="clipped" fixed app color="#193153">
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer" dark />
 
+      <v-spacer />
       <div class="text-center">
         <v-menu offset-y v-if="user.permission == 0">
           <template v-slot:activator="{ on, attrs }">
@@ -58,15 +63,15 @@
             </v-btn>
           </template>
 
-          <v-list>
+          <v-list v-if="notifications != null && notifications.length > 0">
             <v-container
               class="ma-0 pa-0"
               style="max-height: 300px; overflow-y: auto"
             >
               <v-list-item
-                two-line
                 v-for="(item, index) in notifications"
                 :key="index"
+                two-line
                 @click="setVizualized(item.id)"
               >
                 <v-list-item-content>
@@ -92,9 +97,26 @@
               </v-btn>
             </div>
           </v-list>
+
+          <v-list v-else>
+            <v-container
+              class="ma-0 pa-0"
+              style="max-height: 300px; overflow-y: auto"
+            >
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-title
+                    ><v-icon>mdi-menu</v-icon></v-list-item-title
+                  >
+                  <v-list-item-subtitle class="pa-2"
+                    >Não existe nenhum notificação</v-list-item-subtitle
+                  >
+                </v-list-item-content>
+              </v-list-item>
+            </v-container>
+          </v-list>
         </v-menu>
       </div>
-      <v-spacer />
       <div class="text-center">
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
@@ -113,19 +135,10 @@
         <Nuxt />
       </v-container>
     </v-main>
-    <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>
-      <v-list>
-        <v-list-item @click.native="right = !right">
-          <v-list-item-action>
-            <v-icon light> mdi-repeat </v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Switch drawer (click me)</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-    <v-footer :absolute="!fixed" app>
+
+    <!-- <v-footer :absolute="!fixed" app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
-    </v-footer>
+    </v-footer> -->
   </v-app>
 </template>
 
@@ -133,15 +146,6 @@
 export default {
   name: 'DefaultLayout',
 
-  destroy() {
-    this.socketInstance.close()
-  },
-
-  created() {
-    this.user.id = this.$store.state.user.user.id
-    this.getuserpermission()
-    this.getPermission()
-  },
   data() {
     return {
       chats: [],
@@ -158,7 +162,7 @@ export default {
         {
           icon: 'mdi-widgets',
           title: 'Estoque',
-          to: '/listaproduto',
+          to: '/estoque',
         },
         {
           icon: ' mdi-arrow-up-bold-box-outline',
@@ -184,10 +188,22 @@ export default {
       loading: false,
     }
   },
+
+  destroy() {
+    this.socketInstance.close()
+  },
+
   fetch() {
     this.messageSocket()
     this.getUserNotification()
   },
+
+  created() {
+    this.user.id = this.$store.state.user.user.id
+    this.getuserpermission()
+    this.getPermission()
+  },
+
   methods: {
     async requestPermission() {
       try {
@@ -244,21 +260,28 @@ export default {
 
       const $context = this
       this.socketInstance.onmessage = async function (e) {
+        const socketMessage = await JSON.parse(e.data)
+
+        const messageSocket = JSON.parse(socketMessage.message)
+        console.log(messageSocket)
         await $context.getUserNotification()
       }
     },
+
     async getuserpermission() {
       await this.$axios
-        .$get(`user/getbyid?id=${this.user.id}`)
+        .$get(`user/get-by-id?id=${this.user.id}`)
         .then((response) => {
           this.user.permission = response.permission
         })
         .catch(() => {})
     },
+
     async getUserNotification() {
       await this.$axios
         .$get(`notification/get-by-id?id=${this.user.id}`)
         .then((response) => {
+          console.log(response)
           this.notifications = response
           if (this.notifications.length > 0) {
             this.toggleNotification()
@@ -266,6 +289,7 @@ export default {
         })
         .catch(() => {})
     },
+
     async setVizualized(id) {
       await this.$axios
         .$put(`notification/set-visualized?id=${id}`)
@@ -274,6 +298,7 @@ export default {
         })
         .catch(() => {})
     },
+
     async cleanNotification() {
       await this.$axios
         .$put(`notification/set-all-visualized?userId=${this.user.id}`)
@@ -282,6 +307,7 @@ export default {
         })
         .catch(() => {})
     },
+
     toggleNotification() {
       this.isNotification = true
       setTimeout(() => {
@@ -299,23 +325,27 @@ export default {
 }
 
 .bell-ring {
-  animation: bellRingAnimation 0.5s ease-in-out;
+  animation: bellRingAnimation 2s ease infinite;
   transform-origin: top center;
 }
 
 @keyframes bellRingAnimation {
   0%,
   100% {
-    transform: rotate(0deg);
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-3px);
   }
   20%,
+  40%,
   60%,
   80% {
-    transform: rotate(15deg);
-  }
-  40%,
-  100% {
-    transform: rotate(-15deg);
+    transform: translateX(3px);
   }
 }
 </style>

@@ -22,7 +22,7 @@
           </v-avatar>
         </v-btn>
       </template>
-      <v-card>
+      <v-card min-width="150">
         <v-list-item-content class="justify-center">
           <div class="mx-auto text-center">
             <v-avatar color="#f5f5f5">
@@ -89,7 +89,7 @@ export default {
     },
     async getuserAvatar() {
       await this.$axios
-        .$get(`user/getbyid?id=${this.user.id}`)
+        .$get(`user/get-by-id?id=${this.user.id}`)
         .then((response) => {
           this.avatar = response.avatar
         })

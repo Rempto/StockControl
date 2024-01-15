@@ -4,7 +4,9 @@
     class="primary-card pa-8 theme--light"
     style="border-radius: 20px; margin-top: 5px"
   >
-    <h2>novo produto</h2>
+    <div class="d-flex justify-center mb-2">
+      <h1>Criar produto</h1>
+    </div>
     <v-form ref="form" v-model="valid" lazy-validation>
       <v-text-field
         v-model="obj.Name"
@@ -32,7 +34,7 @@
         outlined
       ></v-text-field>
 
-      <v-btn
+      <!-- <v-btn
         :disabled="!valid"
         color="success"
         class="mr-4"
@@ -40,18 +42,34 @@
         @click="validate"
       >
         Registrar
-      </v-btn>
+      </v-btn> -->
+      <div class="d-flex justify-center">
+        <BtnIcon
+          :icon-loading="loading"
+          :title="'Registrar'"
+          :btn-color="'#4c77b4'"
+          :icon="'mdi-plus'"
+          :icon-width="'38px !important'"
+          height="38px"
+          icon-size="22"
+          :disabled="!valid"
+          @action="validate"
+        >
+        </BtnIcon>
+      </div>
     </v-form>
   </v-card>
 </template>
 
 <script>
 export default {
-  created() {
-    this.obj.userId = this.$store.state.user.user.id
+  props: {
+    loading: {
+      type: Boolean,
+      default: () => false,
+    },
   },
   data: () => ({
-    loading: false,
     valid: true,
     obj: {
       Name: '',
@@ -61,6 +79,10 @@ export default {
       userId: '',
     },
   }),
+
+  created() {
+    this.obj.userId = this.$store.state.user.user.id
+  },
 
   methods: {
     validate() {

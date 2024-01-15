@@ -48,7 +48,7 @@ export default {
     },
     async getProduct(obj) {
       await this.$axios
-        .$get(`product/getbyid?id=${obj.ProductId}`)
+        .$get(`product/get-by-id?id=${obj.ProductId}`)
         .then((response) => {
           const prod = {
             id: response.id,

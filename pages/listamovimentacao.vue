@@ -318,7 +318,6 @@ export default {
       await this.$axios
         .$get(`movement/getbyid?id=${id}`)
         .then((response) => {
-          console.log(response)
           this.returnMovement.id = response.id
           this.returnMovement.productName = response.productName
           this.returnMovement.qtd = response.qtd
@@ -360,7 +359,6 @@ export default {
         .then((response) => {
           this.movement = response.movements
           this.totalPages = response.totalPages
-          console.log(this.movement)
         })
         .catch(() => {})
     },

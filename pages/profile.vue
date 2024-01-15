@@ -202,7 +202,7 @@ export default {
     },
     async getuserAvatar() {
       await this.$axios
-        .$get(`user/getbyid?id=${this.user.id}`)
+        .$get(`user/get-by-id?id=${this.user.id}`)
         .then((response) => {
           this.avatar = response.avatar
         })
